@@ -8,7 +8,7 @@
 
 This challenge uses the [W3Schools SQL playground](http://www.w3schools.com/sql/trysql.asp?filename=trysql_select_all). Please add solutions to this markdown file and submit.
 
-Database Info (displayed on screen)
+Database Info (as displayed on screen)
 Tablename	Records
 Customers	91
 Categories	8
@@ -20,21 +20,29 @@ Shippers	3
 Suppliers	29
 
 -----
-
+```
 1. Which customers are from the UK?
 
 SELECT (*)
-FROM Customers
-WHERE Country = 'UK';
+    FROM Customers
+    WHERE Country = 'UK';
 
 --Output:
+
 CustomerID	CustomerName	ContactName	Address	City	PostalCode	Country
+
 4	Around the Horn	Thomas Hardy	120 Hanover Sq.	London	WA1 1DP	UK
+
 11	B's Beverages	Victoria Ashworth	Fauntleroy Circus	London	EC2 5NT	UK
+
 16	Consolidated Holdings	Elizabeth Brown	Berkeley Gardens 12 Brewery	London	WX1 6LT	UK
+
 19	Eastern Connection	Ann Devon	35 King George	London	WX3 6FW	UK
+
 38	Island Trading	Helen Bennett	Garden House Crowther Way	Cowes	PO31 7PJ	UK
+
 53	North/South	Simon Crowther	South House 300 Queensbridge	London	SW7 1RZ	UK
+
 72	Seven Seas Imports	Hari Kumar	90 Wadhurst Rd.	London	OX15 4NB	UK
 
 
@@ -182,6 +190,5 @@ ORDER BY
  	MeanPrice DESC;
 
 --Tokyo Traders. 	
-
-
+```
 
