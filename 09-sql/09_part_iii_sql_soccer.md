@@ -155,21 +155,28 @@ From Q3, we know the number of tie games is 6596. This is an even number, so the
 
 ```
 tied_games=pd.read_sql("""
-                        WITH sorted_goals(date, tied_goals) AS 
-                        (SELECT id, home_team_goal
+                        WITH sorted_goals(tied_goals) AS 
+                        (SELECT home_team_goal
                         FROM Match
                         WHERE home_team_goal = away_team_goal
                         ORDER BY home_team_goal) 
                         
-                            SELECT AVG(home_team_goal)
-                            FROM Match, sorted_goals
-                            WHERE id BETWEEN (6596-1)/2 AND (6596+1)/2
+                            SELECT tied_goals
+                            FROM sorted_goals
+                            ORDER BY tied_goals
+                            LIMIT 6592/2, 3
                             
                         ;""", conn)
 
 tied_games
+
+Output: 
+	tied_goals
+0	1
+1	1
+2	1
 ```
-So the median tie score is 3.0. (3-3)
+Here we see in the list of tied games sorted by home_team_goal, the middle three games each has a home_team_goal of one. So the median tie score is (1+1)/2=1 home goal. The median tie score is 1:1.
 
 
 6. What percentage of players prefer their left or right foot? *Hint:* Calculate either the right or left foot, whichever is easier based on how you setup the problem.
