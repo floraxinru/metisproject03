@@ -149,6 +149,33 @@ There are 18 players with 'Smith' as their last name, and also 18 with 'smith' a
 
 5. What was the median tie score? Use the value determined in the previous question for the number of tie games. 
 
+To find median tie score (already have tied games and their scores), need to sort the tied games, from smallest home_team_goal(=away_team_goal) to largest.
+
+From Q3, we know the number of tie games is 6596. This is an even number, so the median number of goals of the tied games would be the mean of the middle two numbers.
+
+```
+tied_games=pd.read_sql("""
+                        WITH sorted_goals(date, tied_goals) AS 
+                        (SELECT id, home_team_goal
+                        FROM Match
+                        WHERE home_team_goal = away_team_goal
+                        ORDER BY home_team_goal) 
+                        
+                            SELECT AVG(home_team_goal)
+                            FROM Match, sorted_goals
+                            WHERE id BETWEEN (6596-1)/2 AND (6596+1)/2
+                            
+                        ;""", conn)
+
+tied_games
+```
+So the median tie score is 3.0. (3-3)
 
 
 6. What percentage of players prefer their left or right foot? *Hint:* Calculate either the right or left foot, whichever is easier based on how you setup the problem.
+
+(have answer from separate queries, need to combine into one)
+```
+```
+So the percentage of players who prefer their left foot it 28.95%.
+ 
