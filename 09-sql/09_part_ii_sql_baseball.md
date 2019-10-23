@@ -108,6 +108,40 @@ USC has generated the largest number of distinct players, at 102 players.
 
 5. Which players have the longest career? Assume that the `debut` and `finalGame` columns comprise the start and end, respectively, of a player's career. *Hint:* Create a new table from 'Master.csv'. Also note that strings can be converted to dates using the [`DATE`](https://wiki.postgresql.org/wiki/Working_with_Dates_and_Times_in_PostgreSQL#WORKING_with_DATETIME.2C_DATE.2C_and_INTERVAL_VALUES) function and can then be subtracted from each other yielding their difference in days.
 
+```
+#--sqlite doesn't have day() or Datediff function- only date, time, datetime
+    #convert to JulianDay to find difference in days
+
+MAS_df.to_sql('MASTER', conn, if_exists='replace', index = False)
+
+c.execute('''  
+SELECT PLAYERID, JulianDay(YEARMAX)-JulianDay(YEARMIN) as daydiff
+FROM MASTER
+GROUP BY PLAYERID
+ORDER BY daydiff DESC
+LIMIT 10
+          ;''')
+
+for row in c.fetchall():
+    print (row)
+```
+So the player with the ID 'herrmfr01', with a career of 2006 days, followed closely by 'mitrese01' at 2001 days.
+
+
 6. What is the distribution of debut months? *Hint:* Look at the `DATE` and [`EXTRACT`](https://www.postgresql.org/docs/current/static/functions-datetime.html#FUNCTIONS-DATETIME-EXTRACT) functions.
+
+```
+#sqlite3 doesn't support EXTRACT function, using strftime instead
+c.execute('''  
+SELECT COUNT(DISTINCT(PLAYERID)), strftime('%m', DATE(YEARMIN)) as month 
+FROM MASTER
+GROUP BY month
+ORDER BY month
+;''')
+for row in c.fetchall():
+    print (row)
+```
+So there are more debuts in April and May, with May being the most popular month. There are also 50 players who did no enter a debut month.
+
 
 7. What is the effect of table join order on mean salary for the players listed in the main (master) table? *Hint:* Perform two different queries, one that joins on playerID in the salary table and other that joins on the same column in the master table. You will have to use left joins for each since right joins are not currently supported with SQLalchemy.
