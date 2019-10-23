@@ -145,3 +145,33 @@ So there are more debuts in April and May, with May being the most popular month
 
 
 7. What is the effect of table join order on mean salary for the players listed in the main (master) table? *Hint:* Perform two different queries, one that joins on playerID in the salary table and other that joins on the same column in the master table. You will have to use left joins for each since right joins are not currently supported with SQLalchemy.
+
+```
+c.execute('''  
+SELECT MASTER.PLAYERID, AVG(SALARY)
+FROM MASTER 
+    LEFT JOIN SALARIES
+    ON SALARIES.PLAYERID = MASTER.PLAYERID -- without equals sign, returns none
+GROUP BY SALARIES.PLAYERID
+--ORDER BY AVG(SALARY) DESC
+LIMIT 10
+;''')
+for row in c.fetchall():
+    print (row)
+    
+#REPEAT QUERY, EXCEPT SWITCHING THE ORDER OF PLAYERID'S TO JOIN ON:
+c.execute('''  
+SELECT MASTER.PLAYERID, AVG(SALARY)
+FROM MASTER 
+    LEFT JOIN SALARIES
+    ON MASTER.PLAYERID = SALARIES.PLAYERID
+GROUP BY MASTER.PLAYERID
+--ORDER BY AVG(SALARY) DESC
+LIMIT 10;''')
+for row in c.fetchall():
+    print (row)
+```
+
+When we order results by AVG(salary), the top 10 avg salary results are identical, suggesting swapping the table join order on mean salary for the players does not seem to have an effect on the 10 maximum values. This could be due to the column we are joining them on (PlayerID) exists in both tables.
+
+But if we return outputs based on their default order (Grouping by salary.playerID and Master.playerID, respectively, the outputs are different because some player IDs don't seem to exist in other columns. So the order of the IDs joined on does have an effect.
