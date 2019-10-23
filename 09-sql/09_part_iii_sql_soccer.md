@@ -181,8 +181,25 @@ Here we see in the list of tied games sorted by home_team_goal, the middle three
 
 6. What percentage of players prefer their left or right foot? *Hint:* Calculate either the right or left foot, whichever is easier based on how you setup the problem.
 
-(have answer from separate queries, need to combine into one)
 ```
+percent_lefties = pd.read_sql("""
+            WITH lefties(num_l, foot) AS
+            (SELECT COUNT(DISTINCT(player_api_id)), preferred_foot
+            FROM Player_Attributes
+            WHERE preferred_foot = 'left')
+            
+            SELECT CAST(lefties.num_l AS float)/COUNT(DISTINCT(Player_Attributes.player_api_id))
+            FROM lefties,Player_Attributes
+                        
+            ;""", conn)
+percent_lefties 
+
+#USE CAST TO CAST ONE OF THE TWO AGGREGATION RESULTS INTO FLOAT!
+
+OUTPUT:
+CAST(lefties.num_l AS float)/COUNT(DISTINCT(Player_Attributes.player_api_id))
+0	0.289512
+
 ```
 So the percentage of players who prefer their left foot it 28.95%.
  
