@@ -60,7 +60,35 @@ Top 10 teams with highest total salaries:
 
 2. What is the first and last year played for each player? *Hint:* Create a new table from 'Fielding.csv'.
 ```
+#the Fielding table mentioned in the Hint only has firstyear for each table, but not last year. Using table created from
+SchoolsPlayers.csv for Question 5 instead.
 
+MAS_df = pd.read_csv('baseballdata/SchoolsPlayers.csv') 
+MAS_df.head()
+MAS_df.to_sql('MASTER', conn, if_exists='replace', index = False)
+
+c.execute('''  
+SELECT PLAYERID, YEARMIN, YEARMAX
+FROM MASTER
+GROUP BY PLAYERID
+ORDER BY PLAYERID
+          ;''')
+
+for row in c.fetchall():
+    print (row)
+```
+Output of first 10 players by ID:
+```
+('aardsda01', 2002, 2003)
+('abbeybe01', 1888, 1892)
+('abbotgl01', 1970, 1970)
+('abbotje01', 1991, 1992)
+('abbotji01', 1986, 1988)
+('abbotky01', 1987, 1988)
+('abbotod01', 1906, 1910)
+('abernte01', 1939, 1941)
+('ablesha01', 1903, 1904)
+('accarje01', 2001, 2003)
 ```
 
 3. Who has played the most all star games?
