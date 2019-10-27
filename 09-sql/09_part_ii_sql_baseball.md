@@ -60,10 +60,7 @@ Top 10 teams with highest total salaries:
 
 2. What is the first and last year played for each player? *Hint:* Create a new table from 'Fielding.csv'.
 ```
-fie_df = pd.read_csv('baseballdata/Fielding.csv')
-#from df to sql to use query:
-fie_df.to_sql('FIELDING', conn, if_exists='replace', index = False)
-### JOIN OTHER TABLE FOR LAST YEAR?
+
 ```
 
 3. Who has played the most all star games?
@@ -82,11 +79,23 @@ LIMIT 10;
 
 for row in c.fetchall():
     print (row)
+    
+Output:
+('aaronha01', 12)
+('boyerke01', 12)
+('cepedor01', 12)
+('mantlmi01', 12)
+('mayswi01', 12)
+('musiast01', 12)
+('aparilu01', 11)
+('bankser01', 11)
+('berrayo01', 11)
+('howarel01', 11)
 ```
 Six players are tied at 12 games for the most all star games, with IDs: ('aaronha01', 12) ('boyerke01', 12) ('cepedor01', 12) ('mantlmi01', 12) ('mayswi01', 12) ('musiast01', 12)
 
 
-4. Which school has generated the most distinct players? *Hint:* Create new table from 'CollegePlaying.csv'.(typo, should be 'SchoolsPlayers.csv'?)
+4. Which school has generated the most distinct players? *Hint:* Create new table from 'CollegePlaying.csv'(question has typo, should be 'SchoolsPlayers.csv'?).
 
 ```
 sp_df = pd.read_csv('baseballdata/SchoolsPlayers.csv') 
@@ -102,6 +111,19 @@ LIMIT 10;
 
 for row in c.fetchall():
     print (row)
+    
+--Output:
+(102, 'usc')
+(100, 'texas')
+(98, 'arizonast')
+(82, 'stanford')
+(77, 'michigan')
+(75, 'holycross')
+(70, 'notredame')
+(68, 'illinois')
+(66, 'arizona')
+(66, 'ucla')
+
 ```
 USC has generated the largest number of distinct players, at 102 players.
 
@@ -140,6 +162,14 @@ ORDER BY month
 ;''')
 for row in c.fetchall():
     print (row)
+    
+--Output:
+(50, None)
+(182, '01')
+(1006, '02')
+(1040, '03')
+(1799, '04')
+(1780, '05')
 ```
 So there are more debuts in April and May, with May being the most popular month. There are also 50 players who did no enter a debut month.
 
@@ -159,6 +189,20 @@ LIMIT 10
 for row in c.fetchall():
     print (row)
     
+#Output:
+('abbeybe01', None)
+('aardsda01', 1322821.4285714286)
+('abbotje01', 246250.0)
+('abbotji01', 1440055.5555555555)
+('abbotky01', 129500.0)
+('accarje01', 654880.0)
+('ackerji01', 426500.0)
+('acrema01', 133500.0)
+('adamsmi03', 2280133.3333333335)
+('adamsru01', 329500.0)
+
+
+    
 #REPEAT QUERY, EXCEPT SWITCHING THE ORDER OF PLAYERID'S TO JOIN ON:
 c.execute('''  
 SELECT MASTER.PLAYERID, AVG(SALARY)
@@ -170,8 +214,20 @@ GROUP BY MASTER.PLAYERID
 LIMIT 10;''')
 for row in c.fetchall():
     print (row)
+    
+#Output:
+('aardsda01', 1322821.4285714286)
+('abbeybe01', None)
+('abbotgl01', None)
+('abbotje01', 246250.0)
+('abbotji01', 1440055.5555555555)
+('abbotky01', 129500.0)
+('abbotod01', None)
+('abernte01', None)
+('ablesha01', None)
+('accarje01', 654880.0)
 ```
 
 When we order results by AVG(salary), the top 10 avg salary results are identical, suggesting swapping the table join order on mean salary for the players does not seem to have an effect on the 10 maximum values. This could be due to the column we are joining them on (PlayerID) exists in both tables.
 
-But if we return outputs based on their default order (Grouping by salary.playerID and Master.playerID, respectively, the outputs are different because some player IDs don't seem to exist in other columns. So the order of the IDs joined on does have an effect.
+However, if we return outputs based on their default order (Grouping by salary.playerID and Master.playerID, respectively, the outputs are different because some player IDs don't seem to exist in other columns. So the order of the IDs joined on does have an effect.
